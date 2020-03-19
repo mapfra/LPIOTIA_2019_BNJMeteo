@@ -1,0 +1,7 @@
+					--- Répartition du travail ---
+
+Bihane: développement de l'application web et installation de l'environnement de la raspberry (serveur apache...)
+
+Jimmy: Programmation de la carte sparkfun weather shield et développement de l'application mobile
+
+Nassim: Programmation des cartes UCA board et développement de l'application mobile.
