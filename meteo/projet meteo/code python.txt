@@ -44,7 +44,7 @@ while 1:
          [temperature, humidite, luminosite, pression, precipitations, vent, orientationvent]
     ]
     
-    f = open('/home/pi/Desktop/meteo/meteo.csv', 'w')
+    f = open('/var/www/html/meteo.csv', 'w')
     ligneEntete = ";".join(entetes) + "\n"
     f.write(ligneEntete)
     for valeur in valeurs:
@@ -52,4 +52,53 @@ while 1:
          f.write(ligne)
     
     f.close()
-    time.sleep(1)
+    time.sleep(20)
+
+
+
+
+
+------code python pour lumière humidité et température et precipitations
+
+import serial
+import time
+orientationvent = ""
+while 1:
+    ser = serial.Serial('/dev/ttyACM0', 9600)
+    data = ser.read(size=43)
+    humidite = ""
+    #print(humidite)
+    temperature = ""
+    #print(temperature)
+    luminosite = ""
+    #print luminosite
+    precipitations = ""
+    #print precipitations
+    pression = ""
+    #print pression
+    vent = ""
+    #print vent
+    print data
+    entetes = [
+         u'temperature',
+         u'humidite',
+         u'luminosite',
+         u'pression',
+         u'precipitation',
+         u'vitessevent',
+         u'orientationvent'
+    ]
+    
+    valeurs = [
+         [temperature, humidite, luminosite, pression, precipitations, vent, orientationvent]
+    ]
+    
+    f = open('/var/www/html/meteo.csv', 'w')
+    ligneEntete = ";".join(entetes) + "\n"
+    f.write(ligneEntete)
+    for valeur in valeurs:
+         ligne = data + "\n"
+         f.write(ligne)
+    
+    f.close()
+    #time.sleep(1)

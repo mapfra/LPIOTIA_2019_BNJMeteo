@@ -145,7 +145,7 @@ void loop() {
 
 
 
------code du programme dht11------
+-----code du programme dht11 et photoresistance et precipitations------
 
 
 #include <dht11.h>
@@ -190,10 +190,16 @@ void loop()
   Serial.print((float)DHT11.humidity, 2);
   Serial.print("|");
   //Serial.print("Température (°C): ");
-  Serial.println((float)DHT11.temperature, 2);
+  Serial.print((float)DHT11.temperature, 2);
+  
+  int valeur = analogRead(A0);
+  Serial.print("|");
+  Serial.print(valeur);
+  
+  int pluie = analogRead(A3);
+  Serial.print("|");
+  Serial.print(pluie);
+  Serial.println("");
  
   delay(2000);
-}
-
-
 }

@@ -1,13 +1,16 @@
+#!/usr/bin/php
 <?php
-header('content-type: text/html; charset=utf-8');
+define( 'DEBUG', 0);
+
 /* ---------- PRODUCTPRICEINFO FILE ---------- */
-$csvname = "fichier.csv";
+$pathToWriteFile = dirname( __FILE__) . '/';
+$csvname = "meteo.csv";
 $filename    = $pathToWriteFile . $csvname;
 $dateTime = date("o")."-".date("m")."-".date("d")." ".date("H").":".date("i");
 // START Carico il file tramite AJAX
-srand((double)microtime() * 1000000);
-$rand = rand(0, 9999999999999999);
-$rand = str_pad($rand, 14, "0", STR_PAD_BOTH);
+//srand((double)microtime() * 1000000);
+//$rand = rand(0, 9999999999999999);
+//$rand = str_pad($rand, 14, "0", STR_PAD_BOTH);
 
 $handle = fopen($filename, "r");
 $fileSize = filesize($filename);
@@ -23,7 +26,7 @@ $newname="FLUX001_".$dateFormat.".csv";
 $ligne=array();
 
 if (file_exists($filename)) {
-    echo "Le fichier $filename existe. Debut de la synchro<br/>";
+    if ( DEBUG) echo "Le fichier $filename existe. Debut de la synchro<br/>";
 } else {
     echo "Le fichier $filename n'a pas ete synchronise";
     die();
@@ -47,37 +50,37 @@ if (($handle = fopen($filename, "r")) !== FALSE) {
 // Database infos
 $DBhost = 'localhost';
 $DBowner = 'root';
-$DBpw = '';
+$DBpw = 'password';
 $DBName = 'meteo';
+$DBPort = null;
 
-if ($DBPort == "") {
-    $DBconnect = "mysql:dbname=".$DBName.";host=".$DBhost;
-}
-else {
+$DBconnect = "mysql:dbname=".$DBName.";host=".$DBhost;
+if ( is_int( $DBPort)) {
 // OVH sql server
-    $DBconnect = "mysql:dbname=".$DBName.";host=".$DBhost.";port=".$DBPort;
+    $DBconnect .= ";port=".$DBPort;
 }
 
-echo " \$DBconnect = '<b>" .$DBconnect. "</b>' <br>";
-echo "<br> \n";
+if ( DEBUG) echo " \$DBconnect = '<b>" .$DBconnect. "</b><br>";
 
 try {
     // *************************************************************
 
-    // *   ODBC base connnexion avec with driver invocation   *
+    // *  PDO base connnexion avec with driver invocation   *
 
     // *************************************************************
 
-    echo " <font color=blue><b> Etablissement de la connexion SQL en mode PDO </b></font> <br>  <br>";
+    if ( DEBUG) echo " <font color=blue><b> Etablissement de la connexion SQL en mode PDO </b></font> <br>  <br>";
     $pdo = new PDO($DBconnect, $DBowner, $DBpw);
     $pdo->exec('SET NAMES utf8');
-    echo " new PDO = <b>OK</b> <br> \n";
+    if ( DEBUG) echo " new PDO = <b>OK</b> <br> \n";
     $max = count($donnees)-1;
-    echo $donnees[$max][0];
+    if ( DEBUG) echo $donnees[$max][0];
     $reqUpdateTemp = $pdo->prepare("INSERT INTO mesuretemperature (date, mesure) VALUES (:dateTime, :valeur)");
     $reqUpdateTemp->bindParam(':dateTime', $dateTime);
     $reqUpdateTemp->bindParam(':valeur', $donnees[$max][0]);
-    $reqUpdateTemp->execute();
+    if(!empty($donnees[$max][0])){
+    	$reqUpdateTemp->execute();
+    }
 
     $reqUpdateHum = $pdo->prepare("INSERT INTO mesurehumidite (date, valeur) VALUES (:dateTime, :valeur)");
     $reqUpdateHum->bindParam(':dateTime', $dateTime);
@@ -87,25 +90,32 @@ try {
     $reqUpdateLum = $pdo->prepare("INSERT INTO mesureluminosite (date, valeur) VALUES (:dateTime, :valeur)");
     $reqUpdateLum->bindParam(':dateTime', $dateTime);
     $reqUpdateLum->bindParam(':valeur', $donnees[$max][2]);
+    if(!empty($donnees[$max][2])){
     $reqUpdateLum->execute();
+    }
 
     $reqUpdatePres = $pdo->prepare("INSERT INTO mesurepression (date, valeur) VALUES (:dateTime, :valeur)");
     $reqUpdatePres->bindParam(':dateTime', $dateTime);
     $reqUpdatePres->bindParam(':valeur', $donnees[$max][3]);
-    $reqUpdatePres->execute();
+    if(!empty($donnees[$max][3])){
+    	$reqUpdatePres->execute();
+    }
 
     $reqUpdatePrec = $pdo->prepare("INSERT INTO mesureprecipitation (date, valeur) VALUES (:dateTime, :valeur)");
     $reqUpdatePrec ->bindParam(':dateTime', $dateTime);
     $reqUpdatePrec ->bindParam(':valeur', $donnees[$max][4]);
-    $reqUpdatePrec ->execute();
-
+    if(!empty($donnees[$max][4])){
+    	$reqUpdatePrec ->execute();
+    }
     $reqUpdateVent = $pdo->prepare("INSERT INTO mesurevent (date, valeur, valeur2) VALUES (:dateTime, :valeur, :valeur2)");
     $reqUpdateVent ->bindParam(':dateTime', $dateTime);
     $reqUpdateVent ->bindParam(':valeur', $donnees[$max][5]);
     $reqUpdateVent ->bindParam(':valeur2', $donnees[$max][6]);
-    $reqUpdateVent ->execute();
+    if(!empty($donnees[$max][6])){
+    	$reqUpdateVent ->execute();
+    }
     // Fermeture de la connexion
-    echo " <b> Fermeture de la connexion SQL en mode PDO </b> <br>  <br>";
+    if ( DEBUG) echo " <b> Fermeture de la connexion SQL en mode PDO </b> <br>  <br>";
     $pdo = null;
 }
 catch(PDOException $e) {

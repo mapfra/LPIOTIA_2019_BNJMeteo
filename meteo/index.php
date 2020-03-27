@@ -26,7 +26,7 @@
 </body>
 
 <?php
-$bdd = new PDO('mysql:host=localhost;dbname=meteo;charset=utf8', 'root', '');
+$bdd = new PDO('mysql:host=localhost;dbname=meteo;charset=utf8', 'root', 'password');
 if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['date2']))
 {
 	$date_debut = $_POST['date_debut']." 0:00";
@@ -135,7 +135,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                     <tr>
                         <td><?php echo substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4);?></td>
                         <td><?php echo substr($temperature["date"],11, -10)?></td>
-                        <td><?php echo $temperature["valeur"];?></td>
+                        <td><?php echo $temperature["valeur"]." "; if($temperature["valeur"]>700) echo "(jour)"; else echo"(nuit)";?></td>
                     </tr>
                     <?php
                 }
@@ -171,7 +171,12 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                     $count ++;
                     $tot+=$temperature["valeur"];
                 }
-                $moyenne = $tot/$count;
+                    if(!empty($count)) {
+        $moyenne = $tot / $count;
+    }
+    else{
+        $moyenne="--";
+    }
                 ?>
                 <h2 style="color: white;">Pression moyenne: <?php echo substr($moyenne, 0, 4);?> Hpa</h2>
         </div>
