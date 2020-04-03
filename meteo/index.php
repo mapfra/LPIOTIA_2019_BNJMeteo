@@ -57,7 +57,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
         $temperature = $temperature=$reqAfficherTemperature->fetch();
         while($temperature=$reqAfficherTemperature->fetch())
 		{	
-            $jsondate[] = $temperature["date"];
+            $jsondate[] = substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4)." ".substr($temperature["date"],11, -10);
             $jsontemp[] = $temperature["mesure"];
             //var_dump(json_encode($jsondate, JSON_NUMERIC_CHECK));			
 	?>
@@ -129,7 +129,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
 	<?php
 		while($temperature=$reqAfficherTemperature->fetch())
 		{
-            $jsondate[] = $temperature["date"];
+            $jsondate[] = substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4)." ".substr($temperature["date"],11, -10);
             $jsontemp[] = $temperature["valeur"];							
 	?>
 				<tr>
@@ -230,7 +230,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                 <?php
                 while($temperature=$reqAfficherTemperature->fetch())
                 {
-                    $jsondate[] = $temperature["date"];
+                    $jsondate[] = substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4)." ".substr($temperature["date"],11, -10);
                     $jsontemp[] = $temperature["valeur"];
                     ?>
                     <tr>
@@ -301,6 +301,8 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                 <?php
                 while($temperature=$reqAfficherTemperature->fetch())
                 {
+                    $jsondate[] = substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4)." ".substr($temperature["date"],11, -10);
+                    $jsontemp[] = $temperature["valeur"];
                     ?>
                     <tr>
                         <td><?php echo substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4);?></td>
@@ -310,9 +312,39 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                     <?php
                     $count ++;
                     $tot+=$temperature["valeur"];
+                    if(!empty($jsondate)){
+                        $jsondate2 = json_encode($jsondate, JSON_NUMERIC_CHECK);
+                    }
+                    if(!empty($jsontemp)){
+                        $jsontemp2 = json_encode($jsontemp, JSON_NUMERIC_CHECK);
+                    }
                 }
                 ?>
                 <h2 style="color: white;">Cumuls de précipitations: <?php echo $tot;?> mm</h2>
+        </div>
+        <div class="profile"style = "color: white;">
+            <canvas id="myChart"></canvas>
+            <script>
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                    // The type of chart we want to create
+                    type: 'line',
+
+                    // The data for our dataset
+                    data: {
+                        labels: <?php echo $jsondate2 ?>,
+                        datasets: [{
+                            label: 'évolution de le pression',
+                            backgroundColor: 'rgb(182, 128, 141)',
+                            borderColor: 'rgb(255, 255, 255)',
+                            data: <?php echo $jsontemp2 ?>
+                        }]
+                    },
+
+                    // Configuration options go here
+                    options: {}
+                });
+            </script>
         </div>
         <?php
     }
