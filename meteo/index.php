@@ -3,11 +3,13 @@
 <head>
 	<meta charset="utf-8" />
 	<link rel ="stylesheet" href="Style1.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 	<title> Météo </title>
 </head>
 
 <body style = "background:url('unnamed.jpg');background-size:cover;margin:0;">
-	<div class="requete" style="margin-top: 5%;width:40%; float: left;"></br>
+    <div id="cont_0f9eeeec2f5492815f8d13e7134b7a42"><img src="https://www.tameteo.com/wimages/fotoc44b8663d3a847df9a8cb2e3542be346.png" style = "margin-left:15%;margin-right:15%;"></div>
+	<div class="requete" style="margin-left: 15%; margin-right: 15%;"></br>
 		<form name="text" method="POST" action="" style="color: white;">
 			Entrez une date de début : <input class="form-control" type="date" name="date_debut" /></br>
 			Entrez une date de fin : <input type="date" class="form-control" name="date2" /></br>
@@ -22,10 +24,11 @@
 			<input type="submit" class="btn btn-secondary btn-lg" name="valider" value="Voir les relevés"/>
 		</form>
 	</div>
-    <div id="cont_0f9eeeec2f5492815f8d13e7134b7a42" style="float: right; margin-top: 5%;"><img src="https://www.tameteo.com/wimages/fotoc44b8663d3a847df9a8cb2e3542be346.png"></div>
 </body>
 
 <?php
+$jsondate2="";
+$jsontemp2="";
 $bdd = new PDO('mysql:host=localhost;dbname=meteo;charset=utf8', 'root', 'password');
 if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['date2']))
 {
@@ -42,7 +45,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
         $reqAfficherTemperature->bindParam(':date2', $date2);
 		$reqAfficherTemperature->execute();
 	?>
-		<div class="profile" style="width: 70%; margin-left: 10%;">
+		<div class="profile" style="width: 70%; margin-left: 15%;">
 			<table class="table" style="color: white;">
 			<tr>
 				<td><h4>Date</h4></td>
@@ -51,8 +54,12 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
 			</tr>
 					
 	<?php
-		while($temperature=$reqAfficherTemperature->fetch())
-		{							
+        $temperature = $temperature=$reqAfficherTemperature->fetch();
+        while($temperature=$reqAfficherTemperature->fetch())
+		{	
+            $jsondate[] = $temperature["date"];
+            $jsontemp[] = $temperature["mesure"];
+            //var_dump(json_encode($jsondate, JSON_NUMERIC_CHECK));			
 	?>
 				<tr>
 				<td><?php echo substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4);?></td>
@@ -62,7 +69,13 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
 	<?php
             $count ++;
             $tot+=$temperature["mesure"];
-		}
+        }
+        if(!empty($jsondate)){
+            $jsondate2 = json_encode($jsondate, JSON_NUMERIC_CHECK);
+        }
+        if(!empty($jsontemp)){
+            $jsontemp2 = json_encode($jsontemp, JSON_NUMERIC_CHECK);
+        }
 		if(!empty($count)) {
             $moyenne = $tot / $count;
         }
@@ -72,6 +85,30 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
 	?>
                 <h2 style="color: white;">température moyenne: <?php echo substr($moyenne, 0, 4);?> °C</h2>
 		</div>
+        <div class="profile"style = "color: white;">
+            <canvas id="myChart"></canvas>
+            <script>
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                    // The type of chart we want to create
+                    type: 'line',
+
+                    // The data for our dataset
+                    data: {
+                        labels: <?php echo $jsondate2 ?>,
+                        datasets: [{
+                            label: 'évolution de la température',
+                            backgroundColor: 'rgb(182, 128, 141)',
+                            borderColor: 'rgb(255, 255, 255)',
+                            data: <?php echo $jsontemp2 ?>
+                        }]
+                    },
+
+                    // Configuration options go here
+                    options: {}
+                });
+            </script>
+        </div>
 	<?php
 		}
 	else if($selection == "Humidité"){
@@ -81,7 +118,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
 		$reqAfficherTemperature->bindParam(':date2', $date2);
 		$reqAfficherTemperature->execute();
 	?>
-		<div class="profile" style="width: 70%; margin-left: 10%;">
+		<div class="profile" style="width: 70%; margin-left: 15%;">
 			<table class="table" style="color: white;">
 			<tr>
 				<td><h4>Date</h4></td>
@@ -91,7 +128,9 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
 					
 	<?php
 		while($temperature=$reqAfficherTemperature->fetch())
-		{							
+		{
+            $jsondate[] = $temperature["date"];
+            $jsontemp[] = $temperature["valeur"];							
 	?>
 				<tr>
                     <td><?php echo substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4);?></td>
@@ -102,6 +141,12 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
             $count ++;
             $tot+=$temperature["valeur"];
         }
+        if(!empty($jsondate)){
+            $jsondate2 = json_encode($jsondate, JSON_NUMERIC_CHECK);
+        }
+        if(!empty($jsontemp)){
+            $jsontemp2 = json_encode($jsontemp, JSON_NUMERIC_CHECK);
+        }
     if(!empty($count)) {
         $moyenne = $tot / $count;
     }
@@ -111,6 +156,30 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
     ?>
                 <h2 style="color: white;">Humidité moyenne: <?php echo substr($moyenne, 0, 4);?> %</h2>
 		</div>
+        <div class="profile"style = "color: white;">
+            <canvas id="myChart"></canvas>
+            <script>
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                    // The type of chart we want to create
+                    type: 'line',
+
+                    // The data for our dataset
+                    data: {
+                        labels: <?php echo $jsondate2 ?>,
+                        datasets: [{
+                            label: "évolution de l'humidité",
+                            backgroundColor: 'rgb(182, 128, 141)',
+                            borderColor: 'rgb(255, 255, 255)',
+                            data: <?php echo $jsontemp2 ?>
+                        }]
+                    },
+
+                    // Configuration options go here
+                    options: {}
+                });
+            </script>
+        </div>
 	<?php
 	}
     else if($selection == "Luminosité"){
@@ -120,7 +189,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
         $reqAfficherTemperature->bindParam(':date2', $date2);
         $reqAfficherTemperature->execute();
         ?>
-        <div class="profile" style="width: 70%; margin-left: 10%;">
+        <div class="profile" style="width: 70%; margin-left: 15%;">
             <table class="table" style="color: white;">
                 <tr>
                     <td><h4>Date</h4></td>
@@ -150,7 +219,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
         $reqAfficherTemperature->bindParam(':date2', $date2);
         $reqAfficherTemperature->execute();
         ?>
-        <div class="profile" style="width: 70%; margin-left: 10%;">
+        <div class="profile" style="width: 70%; margin-left: 15%;">
             <table class="table" style="color: white;">
                 <tr>
                     <td><h4>Date</h4></td>
@@ -161,6 +230,8 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                 <?php
                 while($temperature=$reqAfficherTemperature->fetch())
                 {
+                    $jsondate[] = $temperature["date"];
+                    $jsontemp[] = $temperature["valeur"];
                     ?>
                     <tr>
                         <td><?php echo substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4);?></td>
@@ -171,14 +242,44 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                     $count ++;
                     $tot+=$temperature["valeur"];
                 }
-                    if(!empty($count)) {
-        $moyenne = $tot / $count;
+                if(!empty($jsondate)){
+                    $jsondate2 = json_encode($jsondate, JSON_NUMERIC_CHECK);
+                }
+                if(!empty($jsontemp)){
+                    $jsontemp2 = json_encode($jsontemp, JSON_NUMERIC_CHECK);
+                }
+                if(!empty($count)) {
+                $moyenne = $tot / $count;
     }
     else{
         $moyenne="--";
     }
                 ?>
                 <h2 style="color: white;">Pression moyenne: <?php echo substr($moyenne, 0, 4);?> Hpa</h2>
+        </div>
+        <div class="profile"style = "color: white;">
+            <canvas id="myChart"></canvas>
+            <script>
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                    // The type of chart we want to create
+                    type: 'line',
+
+                    // The data for our dataset
+                    data: {
+                        labels: <?php echo $jsondate2 ?>,
+                        datasets: [{
+                            label: 'évolution de le pression',
+                            backgroundColor: 'rgb(182, 128, 141)',
+                            borderColor: 'rgb(255, 255, 255)',
+                            data: <?php echo $jsontemp2 ?>
+                        }]
+                    },
+
+                    // Configuration options go here
+                    options: {}
+                });
+            </script>
         </div>
         <?php
     }
@@ -189,7 +290,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
         $reqAfficherTemperature->bindParam(':date2', $date2);
         $reqAfficherTemperature->execute();
         ?>
-        <div class="profile" style="width: 70%; margin-left: 10%;">
+        <div class="profile" style="width: 70%; margin-left: 15%;">
             <table class="table" style="color: white;">
                 <tr>
                     <td><h4>Date</h4></td>
@@ -222,7 +323,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
         $reqAfficherTemperature->bindParam(':date2', $date2);
         $reqAfficherTemperature->execute();
         ?>
-        <div class="profile" style="width: 70%; margin-left: 10%;">
+        <div class="profile" style="width: 70%; margin-left: 15%;">
             <table class="table" style="color: white;">
                 <tr>
                     <td><h4>Date</h4></td>
