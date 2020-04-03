@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="?actionBarSize"
+            android:padding="@dimen/appbar_padding"
+            android:text="STATION METEO"
+            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            android:textStyle="bold" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background"
+        app:layout_anchor="@+id/view_pager"
+        app:layout_anchorGravity="center"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginLeft="64dp"
+            android:layout_marginTop="34dp"
+            android:layout_marginEnd="63dp"
+            android:layout_marginRight="63dp"
+            android:layout_marginBottom="76dp"
+            app:layout_constraintBottom_toTopOf="@+id/button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dateFin">
+
+            <RadioButton
+                android:id="@+id/radiotemp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@android:drawable/btn_radio"
+                android:text="Température"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
+
+            <RadioButton
+                android:id="@+id/radiohum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@android:drawable/btn_radio"
+                android:text="Humidité"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
+
+            <RadioButton
+                android:id="@+id/radiolum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@android:drawable/btn_radio"
+                android:text="Luminosité"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
+
+            <RadioButton
+                android:id="@+id/radiopress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@android:drawable/btn_radio"
+                android:text="Pression"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
+
+            <RadioButton
+                android:id="@+id/radiopreci"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@android:drawable/btn_radio"
+                android:text="Précipitations"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
+
+            <RadioButton
+                android:id="@+id/radiovent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@android:drawable/btn_radio"
+                android:text="Vent"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/dateDebut"
+            android:layout_width="238dp"
+            android:layout_height="76dp"
+            android:layout_marginStart="125dp"
+            android:layout_marginLeft="125dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="124dp"
+            android:layout_marginRight="124dp"
+            android:layout_marginBottom="652dp"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="Entrer une date de début"
+            android:inputType="date"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/dateFin"
+            android:layout_width="238dp"
+            android:layout_height="76dp"
+            android:layout_marginStart="125dp"
+            android:layout_marginLeft="125dp"
+            android:layout_marginTop="19dp"
+            android:layout_marginEnd="124dp"
+            android:layout_marginRight="124dp"
+            android:layout_marginBottom="34dp"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="Entrer une date de fin"
+            android:inputType="date"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dateDebut" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="187dp"
+            android:layout_height="57dp"
+            android:layout_marginStart="148dp"
+            android:layout_marginLeft="148dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="152dp"
+            android:layout_marginRight="152dp"
+            android:layout_marginBottom="52dp"
+            android:text="Voir les relevés"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
