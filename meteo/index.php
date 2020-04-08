@@ -7,7 +7,7 @@
 	<title> Météo </title>
 </head>
 
-<body style = "background:url('unnamed.jpg');background-size:cover;margin:0;">
+<body style = "background:url('unnamed.PNG');background-size:cover;margin:0;">
     <div id="cont_0f9eeeec2f5492815f8d13e7134b7a42"><img src="https://www.tameteo.com/wimages/fotoc44b8663d3a847df9a8cb2e3542be346.png" style = "display: block; margin-left: auto; margin-right: auto; margin-top: 2%;"></div>
 	<div class="requete" style="margin-left: 15%; margin-right: 15%;"></br>
 		<form name="text" method="POST" action="" style="color: white;">
@@ -29,7 +29,7 @@
 <?php
 $jsondate2="";
 $jsontemp2="";
-$bdd = new PDO('mysql:host=localhost;dbname=meteo;charset=utf8', 'root', '');
+$bdd = new PDO('mysql:host=localhost;dbname=meteo;charset=utf8', 'root', 'password');
 if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['date2']))
 {
 	$date_debut = $_POST['date_debut']." 0:00";
@@ -54,7 +54,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
             $jsondate[] = substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4)." ".substr($temperature["date"],11, -10);
             $jsontemp[] = $temperature["mesure"];
             //var_dump(json_encode($jsondate, JSON_NUMERIC_CHECK));
-            $donnees[] .= substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4).";".substr($temperature["date"],11, -10).";".$temperature["mesure"];
+            $donnees[] .= substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4).";".substr($temperature["date"],11, -10).";".$temperature["mesure"]." °C";
             $count ++;
             $tot+=$temperature["mesure"];
 
@@ -129,7 +129,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
 		{
             $jsondate[] = substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4)." ".substr($temperature["date"],11, -10);
             $jsontemp[] = $temperature["valeur"];
-            $donnees[] .= substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4).";".substr($temperature["date"],11, -10).";".$temperature["valeur"];		
+            $donnees[] .= substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4).";".substr($temperature["date"],11, -10).";".$temperature["valeur"]." %";		
 		
             $count ++;
             $tot+=$temperature["valeur"];
@@ -268,7 +268,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                 {
                     $jsondate[] = substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4)." ".substr($temperature["date"],11, -10);
                     $jsontemp[] = $temperature["valeur"];
-                    $donnees[] .= substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4).";".substr($temperature["date"],11, -10).";".$temperature["valeur"];
+                    $donnees[] .= substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4).";".substr($temperature["date"],11, -10).";".$temperature["valeur"]." Hpa";
                     $count ++;
                     $tot+=$temperature["valeur"];
                 }
@@ -341,7 +341,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                 {
                     $jsondate[] = substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4)." ".substr($temperature["date"],11, -10);
                     $jsontemp[] = $temperature["valeur"];
-                    $donnees[] .= substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4).";".substr($temperature["date"],11, -10).";".$temperature["valeur"];		
+                    $donnees[] .= substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4).";".substr($temperature["date"],11, -10).";".$temperature["valeur"]." mm";		
                     $count ++;
                     $tot+=$temperature["valeur"];
                     $fichier = fopen('pdf/donnees.txt', 'r+');
@@ -408,7 +408,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                 {
                     $jsondate[] = substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4)." ".substr($temperature["date"],11, -10);
                     $jsontemp[] = $temperature["valeur"];        
-                    $donnees[] .= substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4).";".substr($temperature["date"],11, -10).";".$temperature["valeur"];
+                    $donnees[] .= substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4).";".substr($temperature["date"],11, -10).";".$temperature["valeur"]." Km/h";
                     $count ++;
                     $tot+=$temperature["valeur"];
                 }

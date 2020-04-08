@@ -38,7 +38,7 @@ function FancyTable($header, $data)
 	{
 		$this->Cell($w[0],6,$row[0],'LR',0,'L',$fill);
 		$this->Cell($w[1],6,$row[1],'LR',0,'L',$fill);
-		$this->Cell($w[2],6,number_format($row[2],0,',',' '),'LR',0,'R',$fill);
+		$this->Cell($w[2],6,utf8_decode($row[2]),'LR',0,'L',$fill);
 		$this->Ln();
 		$fill = !$fill;
 	}
@@ -47,14 +47,27 @@ function FancyTable($header, $data)
 }
 function Header()
 {
+	$monfichier = fopen('donnees.txt', 'r+');
+ 
+	$ligne = fgets($monfichier);
+	fclose($monfichier);
+	$data1 = explode(";", $ligne);
+	$tab_ligne = file('donnees.txt');
+	$monfichier = fopen('donnees.txt', 'r+'); 
+	for($i=0;$i<count($tab_ligne);$i++)
+	{
+		$ligne2 = fgets($monfichier);
+		$data2 = explode(";", $ligne2);
+	}
+	fclose($monfichier);
     // Logo
     $this->Image('logo.png',10,6,30);
     // Police Arial gras 15
     $this->SetFont('Arial','B',15);
     // Décalage à droite
-    $this->Cell(25);
+    $this->Cell(1);
 	// Titre
-    $this->Cell(80,10,'Liste des donnees collectees',1,0,'C');
+    $this->Cell(145,10,utf8_decode("Liste des données relevées du ".$data1[0]." au ".$data2[0]),1,0,'C');
     // Saut de ligne
     $this->Ln(20);
 }
@@ -63,7 +76,7 @@ function Header()
 $pdf = new PDF();
 $pdf->AliasNbPages();
 // Titres des colonnes
-$header = array('Date', 'Heure', 'Valeur',);
+$header = array('Date', 'Heure', utf8_decode("valeur"));
 // Chargement des donn�es
 $data = $pdf->LoadData('donnees.txt');
 $pdf->SetLeftMargin(45);
