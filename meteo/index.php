@@ -10,7 +10,7 @@
 <body style = "background:url('unnamed.PNG');background-size:cover;margin:0;">
     <div id="cont_0f9eeeec2f5492815f8d13e7134b7a42"><img src="https://www.tameteo.com/wimages/fotoc44b8663d3a847df9a8cb2e3542be346.png" style = "display: block; margin-left: auto; margin-right: auto; margin-top: 2%;"></div>
 	<div class="requete" style="margin-left: 15%; margin-right: 15%;"></br>
-		<form name="text" method="POST" action="" style="color: white;">
+		<form name="text" method="POST" action="" style="color: #69620D;">
 			Entrez une date de début : <input class="form-control" type="date" name="date_debut" /></br>
 			Entrez une date de fin : <input type="date" class="form-control" name="date2" /></br>
 			<SELECT class="form-control" name="selection" size="1">
@@ -22,6 +22,7 @@
 					<OPTION>Vent
 				</SELECT></br>
 			<input type="submit" class="btn btn-secondary btn-lg" name="valider" value="Voir les relevés"/>
+            <input type="submit" class="btn btn-secondary btn-lg" name="webcam" value="Voir la webcam en direct"/>
 		</form>
 	</div>
 </body>
@@ -29,7 +30,7 @@
 <?php
 $jsondate2="";
 $jsontemp2="";
-$bdd = new PDO('mysql:host=localhost;dbname=meteo;charset=utf8', 'root', '');
+$bdd = new PDO('mysql:host=localhost;dbname=meteo;charset=utf8', 'root', 'password');
 if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['date2']))
 {
 	$date_debut = $_POST['date_debut']." 0:00";
@@ -87,9 +88,9 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
 		    $moyenne="--";
         }
     ?>  
-                <h2 style="color: white;">température moyenne: <?php echo substr($moyenne, 0, 4);?> °C</h2>
+                <h2 style="color: #69620D;">température moyenne: <?php echo substr($moyenne, 0, 4);?> °C</h2>
 		</div>
-        <div class="profile"style = "color: white; width: 80%; margin-left: 10%;">
+        <div class="profile"style = "color: #69620D; width: 80%; margin-left: 10%;">
             <canvas id="myChart"></canvas>
             <script>
                 var ctx = document.getElementById('myChart').getContext('2d');
@@ -161,9 +162,9 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
         $moyenne="--";
     }
     ?>
-                <h2 style="color: white;">Humidité moyenne: <?php echo substr($moyenne, 0, 4);?> %</h2>
+                <h2 style="color: #69620D;">Humidité moyenne: <?php echo substr($moyenne, 0, 4);?> %</h2>
 		</div>
-        <div class="profile"style = "color: white; width: 80%; margin-left: 10%;">
+        <div class="profile"style = "color: #69620D; width: 80%; margin-left: 10%;">
             <canvas id="myChart"></canvas>
             <script>
                 var ctx = document.getElementById('myChart').getContext('2d');
@@ -228,7 +229,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                 ?>
 
         </div>
-        <div class="profile"style = "color: white; width: 80%; margin-left: 10%;">
+        <div class="profile"style = "color: #69620D; width: 80%; margin-left: 10%;">
             <canvas id="myChart"></canvas>
             <script>
                 var ctx = document.getElementById('myChart').getContext('2d');
@@ -299,9 +300,9 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
         $moyenne="--";
     }
                 ?>
-                <h2 style="color: white;">Pression moyenne: <?php echo substr($moyenne, 0, 4);?> Hpa</h2>
+                <h2 style="color: #69620D;">Pression moyenne: <?php echo substr($moyenne, 0, 4);?> Hpa</h2>
         </div>
-        <div class="profile"style = "color: white; width: 80%; margin-left: 10%;">
+        <div class="profile"style = "color: #69620D; width: 80%; margin-left: 10%;">
             <canvas id="myChart"></canvas>
             <script>
                 var ctx = document.getElementById('myChart').getContext('2d');
@@ -366,9 +367,9 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                     }
                 }
                 ?>
-                <h2 style="color: white;">Cumuls de précipitations: <?php echo $tot;?> mm</h2>
+                <h2 style="color: #69620D;">Cumuls de précipitations: <?php echo $tot;?> mm</h2>
         </div>
-        <div class="profile"style = "color: white; width: 80%; margin-left: 10%;">
+        <div class="profile"style = "color: #69620D; width: 80%; margin-left: 10%;">
             <canvas id="myChart"></canvas>
             <script>
                 var ctx = document.getElementById('myChart').getContext('2d');
@@ -439,9 +440,9 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                     $moyenne="--";
                 }
                 ?>
-                <h2 style="color: white;">Vitesse moyenne: <?php echo substr($moyenne, 0, 4);?> Km/h</h2>
+                <h2 style="color: #69620D;">Vitesse moyenne: <?php echo substr($moyenne, 0, 4);?> Km/h</h2>
         </div>
-        <div class="profile"style = "color: white; width: 80%; margin-left: 10%;">
+        <div class="profile"style = "color: #69620D; width: 80%; margin-left: 10%;">
             <canvas id="myChart"></canvas>
             <script>
                 var ctx = document.getElementById('myChart').getContext('2d');
@@ -467,6 +468,16 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
         </div>
         <?php
     }
+}
+if(isset($_POST["webcam"])){
+?>
+<iframe id="inlineFrameExample" style="display: block; margin-left: auto; margin-right: auto; margin-bottom: 2%;"
+    title="webcam"
+    width="650"
+    height="490"
+    src="http://192.168.1.95:8081">
+</iframe>
+<?php
 }
 ?>
 
