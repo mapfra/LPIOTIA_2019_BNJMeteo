@@ -7,7 +7,7 @@
 	<title> Météo </title>
 </head>
 
-<body style = "background:url('unnamed.PNG');background-size:cover;margin:0;">
+<body style = "background:url('unnamed.png');background-size:cover;margin:0;">
     <div id="cont_0f9eeeec2f5492815f8d13e7134b7a42"><img src="https://www.tameteo.com/wimages/fotoc44b8663d3a847df9a8cb2e3542be346.png" style = "display: block; margin-left: auto; margin-right: auto; margin-top: 2%;"></div>
 	<div class="requete" style="margin-left: 15%; margin-right: 15%;"></br>
 		<form name="text" method="POST" action="" style="color: #69620D;">
@@ -475,7 +475,7 @@ if(isset($_POST["webcam"])){
     title="webcam"
     width="650"
     height="490"
-    src="http://192.168.1.95:8081">
+    src="http://127.0.0.1:8081">
 </iframe>
 <?php
 }

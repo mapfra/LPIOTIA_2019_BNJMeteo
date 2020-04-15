@@ -114,6 +114,14 @@ try {
     if(!empty($donnees[$max][6])){
     	$reqUpdateVent ->execute();
     }
+
+    $rerqDeleteOldValues = $pdo->prepare("DELETE FROM mesuretemperature WHERE date < DATE( NOW() ) AND TIME(date) != '00:00:00' AND TIME(date) != '06:00:00' AND TIME(date) != '12:00:00' AND TIME(date) != '18:00:00';
+    DELETE FROM mesurehumidite WHERE date < DATE( NOW() ) AND TIME(date) != '00:00:00' AND TIME(date) != '06:00:00' AND TIME(date) != '12:00:00' AND TIME(date) != '18:00:00';
+    DELETE FROM mesureluminosite WHERE date < DATE( NOW() ) AND TIME(date) != '00:00:00' AND TIME(date) != '06:00:00' AND TIME(date) != '12:00:00' AND TIME(date) != '18:00:00';
+    DELETE FROM mesurepression WHERE date < DATE( NOW() ) AND TIME(date) != '00:00:00' AND TIME(date) != '06:00:00' AND TIME(date) != '12:00:00' AND TIME(date) != '18:00:00';
+    DELETE FROM mesureprecipitation WHERE date < DATE( NOW() ) AND TIME(date) != '00:00:00' AND TIME(date) != '06:00:00' AND TIME(date) != '12:00:00' AND TIME(date) != '18:00:00';
+    DELETE FROM mesurevent WHERE date < DATE( NOW() ) AND TIME(date) != '00:00:00' AND TIME(date) != '06:00:00' AND TIME(date) != '12:00:00' AND TIME(date) != '18:00:00';");
+    $rerqDeleteOldValues -> execute();
     // Fermeture de la connexion
     if ( DEBUG) echo " <b> Fermeture de la connexion SQL en mode PDO </b> <br>  <br>";
     $pdo = null;
