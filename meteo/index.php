@@ -36,7 +36,8 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
 	$date_debut = $_POST['date_debut']." 0:00";
 	$date2 = $_POST['date2']." 23:59";
 	$selection = $_POST['selection'];
-	$tot=0;
+    $tot=0;
+    $tot2=0;
     $count = 0;
     $donnees[] = "";
 
@@ -341,7 +342,7 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                 while($temperature=$reqAfficherTemperature->fetch())
                 {
                     $jsondate[] = substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4)." ".substr($temperature["date"],11, -10);
-                    $jsontemp[] = $temperature["valeur"];
+                    $jsontemp[] = $temperature["valeur"] * 2.794;
                     $donnees[] .= substr($temperature["date"],8, 2)."/".substr($temperature["date"],5, 2)."/".substr($temperature["date"],0, 4).";".substr($temperature["date"],11, -10).";".$temperature["valeur"]." mm";		
                     $count ++;
                     $tot+=$temperature["valeur"];
@@ -366,8 +367,17 @@ if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['d
                         $jsontemp2 = json_encode($jsontemp, JSON_NUMERIC_CHECK);
                     }
                 }
+        $reqAfficherTemperature2 = $bdd->prepare("SELECT * FROM mesureprecipitation WHERE date < :date1 OR date > :date2");
+        $reqAfficherTemperature2->bindParam(':date1', $date_debut);
+        $reqAfficherTemperature2->bindParam(':date2', $date2);
+        $reqAfficherTemperature2->execute();
+                while($temperature=$reqAfficherTemperature2->fetch())
+                    {
+                        $tot2+=$temperature["valeur"];
+                    }
+                $total = $tot - $tot2;
                 ?>
-                <h2 style="color: #69620D;">Cumuls de précipitations: <?php echo $tot;?> mm</h2>
+                <h2 style="color: #69620D;">Cumuls de précipitations: <?php echo $total * 2.794;?> mm</h2>
         </div>
         <div class="profile"style = "color: #69620D; width: 80%; margin-left: 10%;">
             <canvas id="myChart"></canvas>
