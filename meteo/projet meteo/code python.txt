@@ -114,7 +114,7 @@ from email.MIMEText import MIMEText
 orientationvent = ""
 while 1:
     ser = serial.Serial('/dev/ttyACM0', 9600)
-    data = ser.read(size=43)
+    data = ser.readline()
     humidite = ""
     #print(humidite)
     temperature = ""
@@ -181,4 +181,4 @@ while 1:
                     print date
                 else:
                     print "vent fort mais le mail a deja ete envoye"
-    time.sleep(5)
+#    time.sleep(5)
