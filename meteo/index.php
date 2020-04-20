@@ -30,7 +30,7 @@
 <?php
 $jsondate2="";
 $jsontemp2="";
-$bdd = new PDO('mysql:host=localhost;dbname=meteo;charset=utf8', 'root', 'password');
+$bdd = new PDO('mysql:host=localhost;dbname=meteo;charset=utf8', 'root', '');
 if (isset($_POST['valider']) && !empty($_POST['date_debut']) && !empty($_POST['date2']))
 {
 	$date_debut = $_POST['date_debut']." 0:00";

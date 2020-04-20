@@ -50,7 +50,7 @@ if (($handle = fopen($filename, "r")) !== FALSE) {
 // Database infos
 $DBhost = 'localhost';
 $DBowner = 'root';
-$DBpw = 'password';
+$DBpw = '';
 $DBName = 'meteo';
 $DBPort = null;
 
@@ -73,45 +73,44 @@ try {
     $pdo = new PDO($DBconnect, $DBowner, $DBpw);
     $pdo->exec('SET NAMES utf8');
     if ( DEBUG) echo " new PDO = <b>OK</b> <br> \n";
-    $max = count($donnees)-1;
-    if ( DEBUG) echo $donnees[$max][0];
     $reqUpdateTemp = $pdo->prepare("INSERT INTO mesuretemperature (date, mesure) VALUES (:dateTime, :valeur)");
     $reqUpdateTemp->bindParam(':dateTime', $dateTime);
-    $reqUpdateTemp->bindParam(':valeur', $donnees[$max][0]);
-    if(!empty($donnees[$max][0])){
+    $reqUpdateTemp->bindParam(':valeur', $donnees[1][0]);
+    var_dump($donnees[1][0]);
+    if(!empty($donnees[1][0])){
     	$reqUpdateTemp->execute();
     }
 
     $reqUpdateHum = $pdo->prepare("INSERT INTO mesurehumidite (date, valeur) VALUES (:dateTime, :valeur)");
     $reqUpdateHum->bindParam(':dateTime', $dateTime);
-    $reqUpdateHum->bindParam(':valeur', $donnees[$max][1]);
+    $reqUpdateHum->bindParam(':valeur', $donnees[1][1]);
     $reqUpdateHum->execute();
 
     $reqUpdateLum = $pdo->prepare("INSERT INTO mesureluminosite (date, valeur) VALUES (:dateTime, :valeur)");
     $reqUpdateLum->bindParam(':dateTime', $dateTime);
-    $reqUpdateLum->bindParam(':valeur', $donnees[$max][2]);
-    if(!empty($donnees[$max][2])){
+    $reqUpdateLum->bindParam(':valeur', $donnees[1][2]);
+    if(!empty($donnees[1][2])){
     $reqUpdateLum->execute();
     }
 
     $reqUpdatePres = $pdo->prepare("INSERT INTO mesurepression (date, valeur) VALUES (:dateTime, :valeur)");
     $reqUpdatePres->bindParam(':dateTime', $dateTime);
-    $reqUpdatePres->bindParam(':valeur', $donnees[$max][3]);
-    if(!empty($donnees[$max][3])){
+    $reqUpdatePres->bindParam(':valeur', $donnees[1][3]);
+    if(!empty($donnees[1][3])){
     	$reqUpdatePres->execute();
     }
 
     $reqUpdatePrec = $pdo->prepare("INSERT INTO mesureprecipitation (date, valeur) VALUES (:dateTime, :valeur)");
     $reqUpdatePrec ->bindParam(':dateTime', $dateTime);
-    $reqUpdatePrec ->bindParam(':valeur', $donnees[$max][4]);
-    if(!empty($donnees[$max][4])){
+    $reqUpdatePrec ->bindParam(':valeur', $donnees[1][4]);
+    if(!empty($donnees[1][4])){
     	$reqUpdatePrec ->execute();
     }
     $reqUpdateVent = $pdo->prepare("INSERT INTO mesurevent (date, valeur, valeur2) VALUES (:dateTime, :valeur, :valeur2)");
     $reqUpdateVent ->bindParam(':dateTime', $dateTime);
-    $reqUpdateVent ->bindParam(':valeur', $donnees[$max][5]);
-    $reqUpdateVent ->bindParam(':valeur2', $donnees[$max][6]);
-    if(!empty($donnees[$max][6])){
+    $reqUpdateVent ->bindParam(':valeur', $donnees[1][5]);
+    $reqUpdateVent ->bindParam(':valeur2', $donnees[1][6]);
+    if(!empty($donnees[1][5])){
     	$reqUpdateVent ->execute();
     }
 
