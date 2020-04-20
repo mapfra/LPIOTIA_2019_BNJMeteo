@@ -50,7 +50,7 @@ if (($handle = fopen($filename, "r")) !== FALSE) {
 // Database infos
 $DBhost = 'localhost';
 $DBowner = 'root';
-$DBpw = '';
+$DBpw = 'password';
 $DBName = 'meteo';
 $DBPort = null;
 
