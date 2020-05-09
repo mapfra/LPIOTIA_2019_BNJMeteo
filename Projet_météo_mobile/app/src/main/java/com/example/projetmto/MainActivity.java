@@ -71,13 +71,13 @@ public class MainActivity extends AppCompatActivity {
         int releved = this.radioGroup.getCheckedRadioButtonId();
         final RadioButton radioButtonReleved = (RadioButton) this.findViewById(releved);
         String message = "Le relevé que vous avez choisi est " + radioButtonReleved.getText();
-        message += "\nLa date est contenu entre " + this.datedebut + " et " + this.datefin;
+        message += "\nLa date est contenu entre " + this.datedebut.getText().toString() + " et " + this.datefin.getText().toString();
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
         Intent myIntent = new Intent(MainActivity.this, Result.class);
-        myIntent.putExtra("datedebut", datedebut.getText());
-        myIntent.putExtra("datefin", datefin.getText());
-        myIntent.putExtra("releve", radioButtonReleved.getText());
+        myIntent.putExtra("datedebut", datedebut.getText().toString());
+        myIntent.putExtra("datefin", datefin.getText().toString());
+        myIntent.putExtra("releve", radioButtonReleved.getText().toString());
         startActivity(myIntent);
     }
 

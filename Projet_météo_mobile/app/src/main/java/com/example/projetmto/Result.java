@@ -7,12 +7,17 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class Result extends AppCompatActivity {
@@ -34,17 +39,52 @@ public class Result extends AppCompatActivity {
         datefin = i.getStringExtra("datefin");
         releve = i.getStringExtra("releve");
 
-        OkHttpClient client = new OkHttpClient();
+        if(datedebut == null) {
+            mTextView.setText("Datedebut vide");
+        }
+
+        if(datefin == null) {
+            mTextView.setText("Datefin vide");
+        }
+
+        if(releve == null) {
+            mTextView.setText("Releve vide");
+        }
+
+        MediaType MEDIA_TYPE = MediaType.parse("application/json");
         String url = "https://77.131.214.150/";
+
+        OkHttpClient client = new OkHttpClient();
+
+        JSONObject postdata = new JSONObject();
+        try {
+            postdata.put("date_debut", datedebut);
+            postdata.put("date2", datefin);
+            postdata.put("selection", releve);
+        } catch(JSONException e){
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(MEDIA_TYPE, postdata.toString());
 
         Request request = new Request.Builder()
                 .url(url)
+                .post(body)
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+                final String falseResponse = e.getMessage().toString();
+                Result.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTextView.setText(falseResponse);
+                    }
+                });
             }
 
             @Override
