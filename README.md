@@ -1,8 +1,7 @@
 # LPIOTIA_2019_BNJMeteo
 
-Le répertoire Documents comprend les documents :
-- Rapport de projet
-- Présentation PowerPoint
-- Cahier des charges
+La documentation se trouve dans le répertoire "documents".
 
-Le répertoire BNJ_Météo comprend des répertoire de code source pour l'application mobile et du serveur web
+Le code source des différentes applications et plateformes se trouve dans "code".
+
+Le répertoire "météo" contient la sauvegarde de l'ancien git.
